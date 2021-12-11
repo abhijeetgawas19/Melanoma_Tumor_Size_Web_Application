@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Melanoma Tumor Detection</title>
+    <!--Bootstrap CDN-->
+    <!--CSS-->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <!--Javascript-->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <!--CSS Custom-->
+    <style type="text/css">
+      div.container {
+        margin-bottom: 20px;
+      }
+      div.alert {
+        margin-top: 25px;
+      }
+      span {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <!--Navigation Bar-->
+    <nav class="navbar navbar-dark bg-primary">
+      <h1 class="navbar-brand heading">Melanoma Tumor Size Detection</h1>
+    </nav>
+    <div class="container">
+      <!-- Result Viewer -->
+      <div class="alert alert-primary" role="alert">
+        Tumor Size: {{prediction_result}}
+      </div>
+      <!-- Link for More Information-->
+      <p>
+        <a
+          href="https://www.mayoclinic.org/diseases-conditions/melanoma/symptoms-causes/syc-20374884"
+          class="text-success stretchred-link"
+          target="_blank"
+          >Click Here to Know More About Melanoma Cancer
+        </a>
+      </p>
+      <!--Form Elements -->
+      <form action="{{url_for('predict')}}" , method="POST">
+        <!--Column No 01-->
+        <div class="form-group">
+          <label>
+            Mass of Area under Study (2864.76 - 36995.40) <span>*</span></label
+          >
+          <input
+            type="number"
+            name="mass_npea"
+            placeholder="2864.76"
+            min="2864.76"
+            max="36995.40"
+            step="0.01"
+            required
+          />
+        </div>
+        <!--Column No 02-->
+        <div class="form-group">
+          <label>
+            Size of Area under Study (510.53 - 13535.00) <span>*</span></label
+          >
+          <input
+            type="number"
+            name="size_npear"
+            placeholder="510.53"
+            min="510.53"
+            max="13535.00"
+            step="0.01"
+            required
+          />
+        </div>
+        <!--Column No 03-->
+        <div class="form-group">
+          <label>
+            Ratio of Normal to Malign Surface (0.11482 - 0.52530)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="malign_ratio"
+            placeholder="0.11482"
+            min="0.11482"
+            max="0.52530"
+            step="0.00001"
+            required
+          />
+        </div>
+        <!--Column No 04-->
+        <div class="form-group">
+          <label>
+            Unrecoverable Area of Skin Damaged (10.3101 - 344.0930)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="damage_size"
+            placeholder="10.3101"
+            min="10.3101"
+            max="344.0930"
+            step="0.0001"
+            required
+          />
+        </div>
+        <!--Column No 05-->
+        <div class="form-group">
+          <label>
+            Total Area Exposed to the Tumor (387853.4025 - 4978616.0419)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="exposed_area"
+            placeholder="387853.4025"
+            min="387853.4025"
+            max="4978616.0419"
+            step="0.0001"
+            required
+          />
+        </div>
+        <!--Column No 06-->
+        <div class="form-group">
+          <label>
+            Standard Deviation of Malign Skin Measurements (31.9704 - 528.8900)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="stddevmalign"
+            placeholder="31.9704"
+            min="31.9704"
+            max="528.8900"
+            step="0.0001"
+            required
+          />
+        </div>
+        <!--Column No 07-->
+        <div class="form-group">
+          <label>
+            Error in Malign Skin Measurements (1089.19 - 91983.70)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="err_malign"
+            placeholder="1089.19"
+            min="1089.19"
+            max="91983.70"
+            step="0.01"
+            required
+          />
+        </div>
+        <!--Column No 08-->
+        <div class="form-group">
+          <label>
+            Penalty Applied due to Measurement Error (0 - 340)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="malign_penalty"
+            placeholder="0"
+            min="0"
+            max="340"
+            step="1"
+            required
+          />
+        </div>
+        <!--Column No 09-->
+        <div class="form-group">
+          <label>
+            Ratio of damage to total spread on the skin (15.228 - 46.546)
+            <span>*</span></label
+          >
+          <input
+            type="number"
+            name="damage_ratio"
+            placeholder="15.288"
+            min="15.288"
+            max="46.546"
+            step="0.001"
+            required
+          />
+        </div>
+        <!--Button-->
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <button type="reset" class="btn btn-outline-danger">Reset</button>
+      </form>
+    </div>
+  </body>
+</html>
